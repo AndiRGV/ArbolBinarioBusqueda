@@ -1,51 +1,52 @@
-public class ArbolBinarioBusqueda {
-    private Nodo raiz;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-    public void insertar(int valor) {
-        raiz = insertarRecursivo(raiz, valor);
+public class ArbolBinarioBusquedaTest {
+
+    private ArbolBinarioBusqueda arbol;
+
+    @Before
+    public void setUp() {
+        arbol = new ArbolBinarioBusqueda();
     }
 
-    private Nodo insertarRecursivo(Nodo actual, int valor) {
-        if (actual == null) {
-            return new Nodo(valor);
-        }
-
-        if (valor < actual.valor) {
-            actual.izquierda = insertarRecursivo(actual.izquierda, valor);
-        } else if (valor > actual.valor) {
-            actual.derecha = insertarRecursivo(actual.derecha, valor);
-        }
-
-        return actual;
+    @Test
+    public void testInsertarYBuscarElemento() {
+        arbol.insertar(10);
+        assertTrue(arbol.contiene(10));
     }
 
-    public boolean contiene(int valor) {
-        return buscarRecursivo(raiz, valor);
+    @Test
+    public void testBuscarElementoInexistente() {
+        arbol.insertar(5);
+        arbol.insertar(15);
+        assertFalse(arbol.contiene(20));
     }
 
-    private boolean buscarRecursivo(Nodo actual, int valor) {
-        if (actual == null) return false;
-        if (valor == actual.valor) return true;
-        return valor < actual.valor
-                ? buscarRecursivo(actual.izquierda, valor)
-                : buscarRecursivo(actual.derecha, valor);
+    @Test
+    public void testObtenerMinimo() {
+        arbol.insertar(20);
+        arbol.insertar(10);
+        arbol.insertar(5);
+        assertEquals(5, arbol.obtenerMinimo());
     }
 
-    public int obtenerMinimo() {
-        if (raiz == null) throw new IllegalStateException("arbol vacio");
-        Nodo actual = raiz;
-        while (actual.izquierda != null) {
-            actual = actual.izquierda;
-        }
-        return actual.valor;
+    @Test
+    public void testObtenerMaximo() {
+        arbol.insertar(20);
+        arbol.insertar(30);
+        arbol.insertar(25);
+        assertEquals(30, arbol.obtenerMaximo());
     }
 
-    public int obtenerMaximo() {
-        if (raiz == null) throw new IllegalStateException("arbol vacio");
-        Nodo actual = raiz;
-        while (actual.derecha != null) {
-            actual = actual.derecha;
-        }
-        return actual.valor;
+    @Test(expected = IllegalStateException.class)
+    public void testObtenerMinimoEnArbolVacio() {
+        arbol.obtenerMinimo();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testObtenerMaximoEnArbolVacio() {
+        arbol.obtenerMaximo();
     }
 }
