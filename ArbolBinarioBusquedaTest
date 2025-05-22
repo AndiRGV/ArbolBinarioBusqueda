@@ -1,0 +1,51 @@
+public class ArbolBinarioBusqueda {
+    private Nodo raiz;
+
+    public void insertar(int valor) {
+        raiz = insertarRecursivo(raiz, valor);
+    }
+
+    private Nodo insertarRecursivo(Nodo actual, int valor) {
+        if (actual == null) {
+            return new Nodo(valor);
+        }
+
+        if (valor < actual.valor) {
+            actual.izquierda = insertarRecursivo(actual.izquierda, valor);
+        } else if (valor > actual.valor) {
+            actual.derecha = insertarRecursivo(actual.derecha, valor);
+        }
+
+        return actual;
+    }
+
+    public boolean contiene(int valor) {
+        return buscarRecursivo(raiz, valor);
+    }
+
+    private boolean buscarRecursivo(Nodo actual, int valor) {
+        if (actual == null) return false;
+        if (valor == actual.valor) return true;
+        return valor < actual.valor
+                ? buscarRecursivo(actual.izquierda, valor)
+                : buscarRecursivo(actual.derecha, valor);
+    }
+
+    public int obtenerMinimo() {
+        if (raiz == null) throw new IllegalStateException("arbol vacio");
+        Nodo actual = raiz;
+        while (actual.izquierda != null) {
+            actual = actual.izquierda;
+        }
+        return actual.valor;
+    }
+
+    public int obtenerMaximo() {
+        if (raiz == null) throw new IllegalStateException("arbol vacio");
+        Nodo actual = raiz;
+        while (actual.derecha != null) {
+            actual = actual.derecha;
+        }
+        return actual.valor;
+    }
+}
